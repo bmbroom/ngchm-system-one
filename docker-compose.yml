@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+    dynjsconfigbiobase:
+        image: bmbroom/ngchm-config-biobase
+    chminit:
+        image: insilico/chmdata:latest
+        volumes:
+          - chmData:/chmData:rw
+    chm:
+        image: bmbroom/ngchmtest
+        depends_on:
+          - chminit
+        hostname: chm
+        volumes:
+          - chmData:/chmData
+        networks:
+          - private
+    manager:
+        build:
+          context: ./manager.build
+        depends_on:
+          - chminit
+        hostname: manager
+        volumes:
+          - chmData:/chmData:rw
+        networks:
+          - private
+    dynjs:
+        depends_on:
+          - dynjsconfigbiobase
+        build:
+          context: ./dynjs.build
+        hostname: dynjs
+        volumes_from:
+          - dynjsconfigbiobase:ro
+        networks:
+          - private
+    rproxy:
+        depends_on:
+          - chm
+          - manager
+          - dynjs
+        build:
+          context: ./rproxy.build
+        hostname: rproxy
+        ports:
+          - "8080:80"
+        networks:
+          - default
+          - private
+volumes:
+    chmData:
+        external: true
+
+networks:
+    private:
+        driver: bridge
+
+

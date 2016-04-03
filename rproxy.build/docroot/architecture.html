@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Managed NG-CHM Server Architecture</title>
+<style>
+table.textbox th {
+    color: blue;
+    text-align:left;
+    padding-top:1em;
+    padding-bottom:0.2em;
+}
+</style>
+</head>
+<body>
+<table>
+
+<tr>
+<td>
+<table class='textbox'>
+
+<tr><th>Server Architecture</th></tr>
+<tr><td>
+This page describes the internal architecture of this server.  It is not necessary to know
+or understand this material in order to simply use the system.
+<P>
+This server consists of six Docker containers in total.
+<P>
+There are two data containers:
+<UL>
+<LI>a data container containing the NG-CHMs uploaded to the system, and
+<LI>a data container containing a database of read-only linkout definitions.
+</UL>
+There are three 'backend' server containers:
+<UL>
+<LI>an NG-CHM viewer container,
+<LI>an NG-CHM manager container,
+<LI>a DyCE container for creating content-specific linkouts.
+</UL>
+The three backend server containers are connected to a private (internal) Docker network.
+<P>
+The final container implements a reverse-proxy server with a published interface on a public
+network.  The reverse proxy container is also connected to the private network and forwards
+client requests to the appropriate 'backend' container.
+</UL>
+
+</td></tr>
+</table>
+</td><td>
+<table>
+<tr><td><img src="architecture.png" style="border:solid black thin"></td</tr>
+<tr><th>Server Architecture Diagram</th></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

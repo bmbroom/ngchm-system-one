@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Managed NG-CHM Server</title>
+<style>
+table.textbox th {
+    color: blue;
+    text-align:left;
+    padding-top:1em;
+    padding-bottom:0.2em;
+}
+</style>
+</head>
+<body>
+<table>
+
+<tr>
+<td>
+<table class='textbox'>
+
+<tr><th>About</th></tr>
+<tr><td>
+This server is a managed instance of the <A href="http://bioinformatics.mdanderson.org/main/NG-CHM:Overview">Next-Generation Clustered Heat Map (NG-CHM)</A> system developed at
+<A href="http://www.mdanderson.org">MD Anderson Cancer Center</A>.
+A brief description of the server architecture is available <A href="architecture.html">here</A>.
+</td></tr>
+
+<tr><th>Viewing NG-CHMs</th></tr>
+<tr><td>
+The <A href="/chm">NG-CHM Viewer</A> interface
+can be used to browse and view NG-CHMs
+after they have been uploaded to the server.
+</td></tr>
+
+<tr><th>Managing NG-CHMs</th></tr>
+<tr><td>
+The <A href="/chm/manager/index.html">NG-CHM Manager</A> interface
+can be used to upload NG-CHMs to the system, delete NG-CHMs, etc.
+</td></tr>
+
+<tr><th>Using this server with R/RStudio</th></tr>
+<tr><td>
+To use this server with the <A href="https://github.com/bmbroom/NGCHMR">NG-CHM R library</A>, use the <TT>chmCreateServer</TT> function. Replace <TT>'name'</TT>
+with your name for this server, and replace <TT>'viewer.url'</TT> with the URL to the viewer interface.
+<pre>
+> library(NGCHM)
+> chmCreateServer ('name', <A href="/chm">'viewer.url'</A>)
+</pre>
+Alternatively, you can specify the server details in an initialization file as detailed in the library documentation.
+</td></tr>
+
+<tr><th>Creating an example NG-CHM</th></tr>
+<tr><td>
+The following commands will create a simple NG-CHM and upload it to server 'name'.  The server parameter can be omitted if it is the default (or only) server.
+<PRE>
+> data(TCGA.GBM.EXPR)
+> chm = chmNew ('example', TCGA.GBM.EXPR[1:50,1:50])
+> chmMake (chm, server='name')
+> chmInstall (chm, server='name')
+</PRE>
+The following command will open the new NG-CHM in a new browser window:
+<PRE>
+> browseURL(chmGetURL (chm, server='name'))
+</PRE>
+In the RStudio environment, the following command will display the new NG-CHM in the RStudio viewer pane:
+<PRE>
+> getOption('viewer')(chmGetURL (chm, server='name'))
+</PRE>
+</td></tr>
+
+</table>
+</td>
+
+<td style="padding-left:1em">
+<table>
+<tr><td><IMG src="Screenshot-NGCHM.png" width="300px" style="border:solid black thin"></td></tr>
+<tr><th>A Next-Generation Clustered Heat Map (NG-CHM)</th></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

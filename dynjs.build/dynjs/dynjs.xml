@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app name="dynjs">
+    <global>
+        <config_check_time unit="second">1</config_check_time>
+    </global>
+
+    <section id="getchmcustom">
+        <params>
+            <param type="string" required="yes" flag="--chm" minLength="1" maxLength="128">chm</param>
+        </params>
+        <templates>
+            <dycedir>/usr/local/dyce/dyce</dycedir>
+            <apphome>%dycedir%/dynjs</apphome>
+            <script_dir>%dycedir%/dynjs/code/R</script_dir>
+            <script_name>gencustomjs.R</script_name>
+            <output_file>custom.js</output_file>
+            <use_test_data></use_test_data>  <!-- Disable with blank entry -->
+            <CHMURL>/etc/chm-server-url.txt</CHMURL>
+        </templates>
+        <command>
+            <command_template>/usr/bin/env CHMURL=%CHMURL% APPHOME=%apphome% USE_TEST_DATA=%use_test_data% /usr/bin/Rscript --vanilla %script_dir%/%script_name% %chm% --outfile %output_file%</command_template>
+            <output option="file_path" mime-type="text/x-url;charset=utf8">%output_file%</output>
+        </command>
+        <other_configs>
+            <cache_time unit="minute">10</cache_time>
+        </other_configs>
+    </section>
+
+</app>

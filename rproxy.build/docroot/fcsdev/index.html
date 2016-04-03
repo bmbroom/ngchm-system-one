@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<HTML>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="../d3/d3.min.js"></script>
+<script src="../d3pc/d3.parcoords.js"></script>
+<link rel="stylesheet" type="text/css" href="../d3pc/d3.parcoords.css">
+
+<table>
+<tr>
+<td>
+    <div id="example" class="parcoords" style="width:1360px;height:850px"></div>
+</td>
+<td>
+<form style='height:826px'>
+<select multiple id="dimselect" style='height:90%'></select>
+<div>
+<button id="showdim">Show</button>
+<button id="hidedim">Hide</button>
+<button id="colorby">Color by</button>
+</div>
+<div>
+Coloring by: <span id="coloringby"></span>
+</div>
+</form>
+</td>
+</tr>
+</table>
+
+<!-- Run "python cvt.py > cvtdata.csv" to create required data file. -->
+
+<script>
+
+var color;
+
+function setColorFunction (dim) {
+    color = (function (dimval) {
+                 var lo = d3.min (parcoords.state.data, dimval);
+                 var hi = d3.max (parcoords.state.data, dimval);
+                 var cg = parcoords.getNumberScale(dim).range(["#00ff00","#ff0000"]).domain([lo,hi]);
+                 return function (d) { return cg(+dimval(d)) };
+             }) (function (d) { return +d[dim]; });
+    $("span#coloringby").text(dim);
+}
+
+  var cvtdata;
+  var allDimensions;
+  var displayedDimensions;
+  var parcoords;
+
+function createDimensionButtons(dims) {
+    dims.forEach(function(x){$("<option value='"+x+"'>"+x+"</option>").appendTo('#dimselect')});
+}
+
+function updateDimensions() {
+    parcoords.dimensions(displayedDimensions)
+        .render()
+        .updateAxes();
+    parcoords.svg.selectAll("text")
+        .style("font", "10px sans-serif");
+}
+
+d3.csv('cvtdata.csv', function(data) {
+  data = data.map(function(xx){var el; for (el in xx) if (xx.hasOwnProperty(el)) { xx[el]=+xx[el];if(xx[el]<0)xx[el]=0; }; return xx;})
+  cvtdata = data;
+  parcoords = d3.parcoords()("#example")
+    .data(data)
+    .detectDimensions();
+  parcoords.numberScale.default = d3.scale.asinh;
+  parcoords.numberScale.Time = d3.scale.linear;
+  parcoords.numberScale.Cell_length = d3.scale.linear;
+  allDimensions = parcoords.dimensions();
+  setColorFunction (allDimensions[0]);
+  parcoords = parcoords.color(color)
+    .alpha(0.05)
+    .composite("darker")
+    .margin({ top: 24, left: 150, bottom: 12, right: 0 })
+    .mode("queue")
+    .render()
+    .brushMode("1D-axes");  // enable brushing
+
+  createDimensionButtons (allDimensions);
+  displayedDimensions = allDimensions;
+  updateDimensions ();
+  $('#dimselect').val(allDimensions);
+
+  $('#hidedim').click(function(ev) {
+      var dims = $('#dimselect').val();
+      if (dims !== null) {
+	  // Keep displayed dimensions unless dimension is in selected dimensions
+          var tmp = [];
+          for (var dd in displayedDimensions) {
+	      if (dims.indexOf(displayedDimensions[dd]) < 0)
+	          tmp.push (displayedDimensions[dd]);
+          }
+	  displayedDimensions = tmp;
+	  updateDimensions ();
+      }
+      $('#dimselect').val(displayedDimensions);
+      ev.preventDefault();
+  });
+
+  $('#showdim').click(function(ev) {
+      var dims = $('#dimselect').val();
+      if (dims !== null) {
+	  // Add selected dimensions to displayed dimensions if not already present.
+          for (var dd in dims) {
+	      if (displayedDimensions.indexOf(dims[dd]) < 0)
+	          displayedDimensions.push (dims[dd]);
+          }
+	  updateDimensions ();
+      }
+      $('#dimselect').val(displayedDimensions);
+      ev.preventDefault();
+  });
+
+  $('#colorby').click(function(ev) {
+      var dims = $('#dimselect').val();
+      ev.preventDefault();
+      $('#dimselect').val(displayedDimensions);
+      if (dims.length !== 1) {
+	  alert ('Select exactly 1 dimension to color by');
+      } else {
+          setColorFunction (dims[0]);
+          parcoords.color(color).render();
+      }
+  });
+});
+
+</script>
+
+</HTML>
