@@ -24,8 +24,10 @@ services:
         hostname: manager
         volumes:
           - chmData:/chmData:rw
+        ports:
+          - "18080:18080"
         networks:
-          - private
+          - default
     dynjs:
         depends_on:
           - dynjsconfigbiobase
@@ -39,7 +41,6 @@ services:
     rproxy:
         depends_on:
           - chm
-          - manager
           - dynjs
         build:
           context: ./rproxy.build
