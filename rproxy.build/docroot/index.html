@@ -41,10 +41,13 @@ can be used to upload NG-CHMs to the system, delete NG-CHMs, etc.
 <tr><th>Using this server with R/RStudio</th></tr>
 <tr><td>
 To use this server with the <A href="https://github.com/bmbroom/NGCHMR">NG-CHM R library</A>, use the <TT>chmCreateServer</TT> function. Replace <TT>'name'</TT>
-with your name for this server, and replace <TT>'viewer.url'</TT> with the URL to the viewer interface.
+with your name for this server, <TT>'privateAddr'</TT> with the private name or IP address of the server, and <TT>'public'</TT> with the public
+name or IP addess of the server (if different).  The R library will communicate with the server using the private address, while the public address will be
+used by your browser to view NG-CHMs.  In a cloud environment, you would use the server's internal name/address for the private address, and it's external IP
+address for the public address.
 <pre>
 > library(NGCHM)
-> chmCreateServer ('name', <A href="/chm">'viewer.url'</A>)
+> chmCreateManagedServer ('name', 'privateAddr', 'publicAddr')
 </pre>
 Alternatively, you can specify the server details in an initialization file as detailed in the library documentation.
 </td></tr>
