@@ -30,18 +30,20 @@ There are two data containers:
 <LI>a data container containing the NG-CHMs uploaded to the system, and
 <LI>a data container containing a database of read-only linkout definitions.
 </UL>
-There are three 'backend' server containers:
+There are three application server containers:
 <UL>
 <LI>an NG-CHM viewer container,
 <LI>an NG-CHM manager container,
 <LI>a DyCE container for creating content-specific linkouts.
 </UL>
-The three backend server containers are connected to a private (internal) Docker network.
+The NG-CHM and DyCE server containers are connected to a private (internal) Docker network.
 <P>
-The final container implements a reverse-proxy server with a published interface on a public
-network.  The reverse proxy container is also connected to the private network and forwards
+A published, view-only interface is implemented via a reverse-proxy server.
+The reverse proxy container is also connected to the private network and forwards
 client requests to the appropriate 'backend' container.
-</UL>
+<P>
+To enable users of this system to limit write access to the system, the NG-CHM Manager interface is published
+separately.
 
 </td></tr>
 </table>
