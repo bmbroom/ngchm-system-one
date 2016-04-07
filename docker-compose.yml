@@ -46,9 +46,8 @@ services:
           context: ./rproxy.build
         hostname: rproxy
         ports:
-          - "8080:80"
+          - "80:80"
         networks:
-          - default
           - private
 volumes:
     chmData:
