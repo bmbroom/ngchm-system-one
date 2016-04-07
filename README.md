@@ -22,7 +22,7 @@ In a cloud environment you might need to enable access to those ports.
 
 ## Creating NG-CHMs
 
-This system is designed to be a central hub for storinig/viewing NG-CHMs created on client machines. It does not include an integrated builder interface.
+This system is designed to be a central hub for storing/viewing NG-CHMs created on client machines. It does not include an integrated builder interface.
 
 A [demonstration RStudio-based system](https://github.com/bmbroom/rstudio-isb-ngchm-demo) with the NGCHM R library preinstalled is available on github.
 
