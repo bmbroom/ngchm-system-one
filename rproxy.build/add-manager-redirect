@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Usage: add-manager-redirect port
+#
+# Add redirect entry for the chm manager to the specified port.
+#
+
+source /usr/local/tools/getconfig
+
+if [ $# -ne 1 ] ; then
+    echo Usage: add-manager-redirect 'port'
+    exit 1
+fi
+PORT="$1"
+
+echo Creating redirect entry to port: ${PORT} for chm manager
+cat > ${DYCEPROXYDIR}/manager.conf << SVRBLOCK
+    location /chm/manager {
+    	return 301 http://\$http_host:${PORT}/chm/manager/index.html;
+    }
+SVRBLOCK
+
+touch $DYCEPROXYDIR
+exit 0
