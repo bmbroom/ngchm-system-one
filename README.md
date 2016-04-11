@@ -6,6 +6,9 @@ This repository contains a docker-compose file for creating a managed [Next-Gene
 
 Clone this repository to a machine running [Docker](https://www.docker.com/) version 10 or higher and [Docker Compose](https://docs.docker.com/compose/) version 1.6.2 or higher.  We suggest a machine with at least four CPUs and four gigabytes of memory.
 
+If you are cloning onto a **Microsoft Windows** machine, add the "-c autocrlf=input" option to your git clone command to preserve Unix-style line endings.
+Some of the files in the repository will be added to docker images.  To work properly, these files must keep their Unix-style line endings.
+
 The system uses a named docker volume to store uploaded NG-CHMs:
 ```bash
 $ docker volume create --name=chmData
