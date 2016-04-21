@@ -3,6 +3,8 @@ version: '2'
 services:
     dynjsconfigbiobase:
         image: bmbroom/ngchm-config-biobase
+    dynjsconfigtcga:
+        image: bmbroom/ngchm-config-tcga
     chminit:
         image: insilico/chmdata:latest
         volumes:
@@ -36,6 +38,7 @@ services:
         hostname: dynjs
         volumes_from:
           - dynjsconfigbiobase:ro
+          - dynjsconfigtcga:ro
         networks:
           - private
     rproxy:
