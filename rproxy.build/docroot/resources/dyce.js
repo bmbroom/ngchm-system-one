@@ -379,7 +379,11 @@ var DynamicViewer = (function ($) {
 		    try { asjson = JSON.parse(response)} catch (e) {};
 		    if (asjson !== undefined && asjson.requestKey !== undefined) {
                         if (asjson.jobStatus === "completed") {
-			    callback (null, asjson.resultsFileURL);
+                            if (asjson.resultsType === "file url") {
+			        callback (null, asjson.results);
+                            } else {
+				callback (new Error("unexpected DyCE resultsType"));
+                            }
                         }
 			else {
 			    // Not finished yet - retry with request key...
